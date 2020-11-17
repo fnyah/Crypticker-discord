@@ -38,8 +38,7 @@ let fetchCrypto = async(message) => {
   // gets coin's price data for chart 
   let chartData = []
   chartData = await CoinGeckoClient.coins.fetchMarketChart(tokenId, {
-    days: "7",
-    vs_currency: "usd"
+    days: "365"
   });
   chartData = chartData.data.prices; 
   let filterChartData = chartData.map(value => {
@@ -49,11 +48,16 @@ let fetchCrypto = async(message) => {
     }
   })
   // converting returned to human readable format and rounding coin price
+    let dateForChart = []; 
+    let priceForChart = []; 
     for (let i = 0; i < filterChartData.length; i++) {
       filterChartData[i].day = moment().format("MMM Do")
       if (filterChartData[i].price >= 1) filterChartData[i].price = filterChartData[i].price.toFixed(2)
+      dateForChart.push(filterChartData[i].day)
+      priceForChart.push(parseFloat(filterChartData[i].price))
     }
-    
+    // console.log(priceForChart)
+    console.log(dateForChart)
     return {
       tokenName, 
       currentPrice,
@@ -64,12 +68,13 @@ let fetchCrypto = async(message) => {
       change24,
       change7d,
       change1yr, 
-      filterChartData
+      dateForChart,
+      priceForChart
     }
 }
 
 let makeEmbedCard = async(message, coinData) => {
-  const exampleEmbed = new Discord.MessageEmbed()
+  const embed = new Discord.MessageEmbed()
     .setColor('#43ff0a')
     .setTitle(coinData.tokenName + " " + "(" + coinData.tokenSymbol.toUpperCase() + ")")
     .setURL(coinData.homepage)
@@ -83,8 +88,46 @@ let makeEmbedCard = async(message, coinData) => {
       { name: 'One Year Change:', value: coinData.change1yr + "%", inline: true },
     )
     .setTimestamp()
-  message.channel.send(exampleEmbed);
+    const width = 1200;
+    const height = 800;
+    var type = 'line';
+    const canvasRenderService = new CanvasRenderService(width, height, (ChartJS) => { });
+    const image = await canvasRenderService.renderToBuffer({
+      type: type,
+      data: {
+        labels: coinData.dateForChart,
+        datasets: [{
+            label: '# of Votes',
+            data: coinData.priceForChart,
+            backgroundColor: 'rgba(0, 255, 10, 0.2)',
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+      scales: {
+          yAxes: [{
+              ticks: {
+                  beginAtZero: true
+              }
+          }]
+      }
+  }
+    });
+    const attachment = new Discord.MessageAttachment(image, "image.png");
+    embed.attachFiles(attachment);
+    embed.setImage("attachment://image.png");
+    
+  message.channel.send(embed);
 }
+
 
 client.on('message', async (message) => {
   let coinData; 
