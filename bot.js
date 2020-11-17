@@ -51,7 +51,7 @@ let fetchCrypto = async(message) => {
     let dateForChart = []; 
     let priceForChart = []; 
     for (let i = 0; i < filterChartData.length; i++) {
-      filterChartData[i].day = moment().format("MMM Do")
+      filterChartData[i].day = moment().format("MMM Do 20")
       if (filterChartData[i].price >= 1) filterChartData[i].price = filterChartData[i].price.toFixed(2)
       dateForChart.push(filterChartData[i].day)
       priceForChart.push(parseFloat(filterChartData[i].price))
@@ -88,34 +88,25 @@ let makeEmbedCard = async(message, coinData) => {
       { name: 'One Year Change:', value: coinData.change1yr + "%", inline: true },
     )
     .setTimestamp()
-    const width = 1200;
-    const height = 800;
-    var type = 'line';
+    const width = 600;
+    const height = 400;
+    var type = 'bar';
     const canvasRenderService = new CanvasRenderService(width, height, (ChartJS) => { });
     const image = await canvasRenderService.renderToBuffer({
       type: type,
       data: {
         labels: coinData.dateForChart,
         datasets: [{
-            label: '# of Votes',
+            label: 'Change over one year',
             data: coinData.priceForChart,
-            backgroundColor: 'rgba(0, 255, 10, 0.2)',
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
+            backgroundColor: 'rgba(0, 255, 10, 0.5)',
         }]
     },
     options: {
       scales: {
           yAxes: [{
               ticks: {
-                  beginAtZero: true
+                  beginAtZero: false
               }
           }]
       }
