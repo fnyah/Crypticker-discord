@@ -9,8 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chart.js": "^2.9.4",
+    "chartjs-node-canvas": "^3.0.6",
     "coingecko-api": "^1.0.10",
     "discord.js": "^12.4.1",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "moment": "^2.29.1"
   }
 }
