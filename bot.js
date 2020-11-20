@@ -57,9 +57,7 @@ let fetchCrypto = async(message) => {
       dateForChart.push(filterChartData[i].day)
       priceForChart.push(parseFloat(filterChartData[i].price))
     }
-    // console.log(priceForChart)
-    // console.log(dateForChart)
-    // console.log(image)
+
     return {
       tokenName, 
       currentPrice,
@@ -77,12 +75,12 @@ let fetchCrypto = async(message) => {
 }
 
 let makeEmbedCard = async(message, coinData) => {
-    let bgColor;
-    if (coinData.change1Month > 0) {
-        bgColor = 'rgba(0, 255, 0, 0.8)';
-    } else {
-      bgColor = 'rgba(255, 0, 0, 0.8)';
-    }
+  let bgColor;
+  if (coinData.change1Month > 0) {
+    bgColor = 'rgba(0, 255, 0, 0.8)';
+  } else {
+    bgColor = 'rgba(255, 0, 0, 0.8)';
+  }
   const embed = new Discord.MessageEmbed()
     .setColor('#43ff0a')
     .setTitle(coinData.tokenName + " " + "(" + coinData.tokenSymbol.toUpperCase() + ")")
@@ -110,40 +108,38 @@ let makeEmbedCard = async(message, coinData) => {
             data: coinData.priceForChart,
             backgroundColor: bgColor,
         }]
-    },
-    options: {
-      legend: {
-        display: false, 
-        labels: {
-          fontColor: "white",
-          fontSize: 25
         },
-      },
-        scales: {
+        options: {
+          legend: {
+            display: false, 
+              labels: {
+                fontColor: "white",
+                fontSize: 25
+              },
+          },
+          scales: {
             yAxes: [{
-                ticks: {
-                    fontColor: "white",
-                    fontSize: 20,
-                    beginAtZero: true
-                }
+              ticks: {
+                fontColor: "white",
+                fontSize: 20,
+                beginAtZero: true
+              }
             }],
             xAxes: [{
-                ticks: {
-                  fontColor: "white",
-                  fontSize: 20,
-                  beginAtZero: false
-                } 
+              ticks: {
+                fontColor: "white",
+                fontSize: 20,
+                beginAtZero: false
+              } 
             }]
+          }
         }
-  }
     });
     const attachment = new Discord.MessageAttachment(image, "image.png");
     embed.attachFiles(attachment);
     embed.setImage("attachment://image.png");
-    
-  message.channel.send(embed);
+    message.channel.send(embed);
 }
-
 
 client.on('message', async (message) => {
   let coinData; 
