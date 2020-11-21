@@ -4,4 +4,4 @@ Crypticker is a nodejs powered Discord bot to get a quick and concise price read
 
 # Demo 
 
-<img src="/README.md"/>
+![demo](https://github.com/fnyah/Crypticker-discord/blob/main/demo-image.png?raw=true)
