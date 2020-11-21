@@ -1,2 +1,7 @@
-# Crypticker-discord
-Reworked crypto price bot for discord. More info... SOON. 
+# Crypticker Discord Bot
+
+Crypticker is a nodejs powered Discord bot to get a quick and concise price readout of any cryptocurrency listed on [CoinGecko](https://www.coingecko.com/en)
+
+# Demo 
+
+<img src="/README.md"/>
